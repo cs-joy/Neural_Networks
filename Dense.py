@@ -16,4 +16,6 @@ class Dense(Layer):
     #bias_gradient = output_gradient # δE/δB = δE/δY, since derivative of the error respect to bias(δE/δB) is equal to derivative of the error respect to output(δE/δY), hence we can ignore this line of code and thus i comment this code
     self.weights -= learning_rate * weights_graident # updating weights parameter, W
     self.bias-= learning_rate * output_gradient # updating bias parameter, B
-    return np.dot(self.weights.T, output_gradient) # calculate the derivative of the error respect to the input(X), δE/δX = W^t . δE/δY, where W^t means transpose matrix of W
+    input_gradient = np.dot(self.weights.T, output_gradient) # calculate the derivative of the error respect to the input(X), δE/δX = W^t . δE/δY, where W^t means transpose matrix of W
+    return input_gradient
+
