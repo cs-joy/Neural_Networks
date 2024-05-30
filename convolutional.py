@@ -27,8 +27,8 @@ class Convolutional(Layer):
 
         for i in range(self.depth):
             for j in range(self.input_depth):
-                kernels_gradient[i ,j] = signal.correlate2d(self.input[j], output_graident[i])
-                input_graident[j] += signal.convolve2d(output_graident[i], self.kernels)
+                kernels_gradient[i ,j] = signal.correlate2d(self.input[j], output_graident[i], "valid")
+                input_graident[j] += signal.convolve2d(output_graident[i], self.kernels[i, j], "full")
         self.kernels -= learning_rate * kernels_gradient
         self.biases -= learning_rate * output_graident
         return input_graident
