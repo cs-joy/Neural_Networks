@@ -20,3 +20,15 @@ class Convolutional(Layer):
             for j in range(self.input_depth):
                 self.output += signal.correlate2d(self.input[j], self.kernels[i, j], "valid") #https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.correlate2d.html
         return self.output
+    
+    def backward(self, output_graident, learning_rate):
+        kernels_gradient = np.zeros(self.kernel_shape)
+        input_graident = np.zeros(self.input_shape)
+
+        for i in range(self.depth):
+            for j in range(self.input_depth):
+                kernels_gradient[i ,j] = signal.correlate2d(self.input[j], output_graident[i])
+                input_graident[j] += signal.convolve2d(output_graident[i], self.kernels)
+        self.kernels -= learning_rate * kernels_gradient
+        self.biases -= learning_rate * output_graident
+        return input_graident
